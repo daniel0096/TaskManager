@@ -1,0 +1,44 @@
+# Ignorování binárních souborů a objektových souborů
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.a
+*.lib
+*.exe
+*.out
+
+# Ignorování build složky
+build/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# Ignorování závislostí (pokud nejsou součástí repozitáře)
+dependencies/
+
+# Ignorování IDE konfigurací
+.vscode/
+*.code-workspace
+.idea/
+*.iml
+
+# Ignorování souborů generovaných editory
+*.swp
+*.swo
+*.bak
+
+# Ignorování závislostí a virtuálních prostředí (např. pro Python)
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Logy a dočasné soubory
+*.log
+*.tmp
+*.cache
+*.DS_Store
+Thumbs.db
