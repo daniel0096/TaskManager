@@ -3,12 +3,13 @@
 #include "Windows.h"
 #include <filesystem>
 
-const int DIRECTORY_MAX_LEN = 2;
+const int DIRECTORY_MAX_LEN = 3;
 
 static std::string DIRECTORIES[DIRECTORY_MAX_LEN] =
 {
 	"root",
-	"log"
+	"log",
+	"config"
 };
 
 class CFileSystem
@@ -16,11 +17,12 @@ class CFileSystem
 public:
 	/* rewrite this */
 
+	std::filesystem::path GetLogDirectory();
+
 	void SetRootDirectory(std::string& rootDir);
 	std::filesystem::path GetRootDirectory();
 
-	void SetBaseOutputDir(std::string& outputDir);
-	std::filesystem::path GetBaseOutputDirectory();
+	std::filesystem::path GetConfigDirectory();
 
 	void CreateFiles(const std::string& fileName);
 	std::filesystem::path GetBaseDirectory();
@@ -28,7 +30,7 @@ public:
 
 	/* rewrite this */
 
-
+	bool FileWrite(const std::string& fileName, const std::string& content);
 
 	static CFileSystem& Instance()
 	{
@@ -43,5 +45,6 @@ private:
 
 	std::string m_rootDir;
 	std::string m_baseOutputDir;
+	std::string m_configDir;
 	bool m_fileExists;
 };

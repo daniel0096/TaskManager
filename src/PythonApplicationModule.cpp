@@ -1,6 +1,7 @@
 #include "PythonApplicationModule.h"
 #include "Log.h"
 
+/*test*/
 static PyObject* app_multiplyFloated(PyObject* self, PyObject* args)
 {
 	float a;
@@ -41,6 +42,7 @@ static PyObject* app_sendLog(PyObject* self, PyObject* args)
 
 static PyMethodDef ApplicationMethods[] =
 {
+	/*test*/
 	{ "f_multiply", app_multiplyFloated, METH_VARARGS, "Multiply two floats" },
 	{ "PY_TRACE", app_sendLog, METH_VARARGS, "Log Python messages to C++ using TRACE_LOG." },
 	{ nullptr, nullptr, 0, nullptr }

@@ -4,12 +4,24 @@
 #include <unordered_map>
 #include <cstdarg>
 
-/* set of log_level CLog::Instance().SetLogLevel(LOG_LEVEL_LOG); */
+/* CLog::Instance().SetLogLevel(LOG_LEVEL_LOG); */
 
 #define TRACE_LOG(log_level, format, ...) \
 	CLog::Instance().TraceLog(log_level, format, ##__VA_ARGS__)
 
-const uint8_t FILE_MAX_LEN = 2;
+/*move to file system*/
+const uint8_t FILE_MAX_LEN = 3;
+
+/*
+	enum eFileType
+	{
+		FILE_TYPE_NONE,
+		FILE_TYPE_SYSLOG,
+		FILE_TYPE_SYSERR,
+		FYLE_TYPE_CONFIG
+	}
+*/
+/*-----------------*/
 
 enum eLogLevel
 {
@@ -19,10 +31,13 @@ enum eLogLevel
 	LOG_LEVEL_MAX_NUM
 };
 
+/*move to filesystem*/
 static std::string FILES[FILE_MAX_LEN] = {
 	"syslog.txt",
-	"sysser.txt"
+	"sysser.txt",
+	"settings.cfg"
 };
+/*-----------------*/
 
 class CLog
 {

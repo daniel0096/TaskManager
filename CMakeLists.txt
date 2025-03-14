@@ -23,24 +23,24 @@ set(HEADERS
 	src/Config.h
 )
 
-# Base dependency folder
+#	base dependency folder
 set(DEPENDENCIES_DIR "${CMAKE_SOURCE_DIR}/dependencies")
 
-# Default dependencies folder
+#	default dependencies folder
 set(INCLUDE_DIR "${DEPENDENCIES_DIR}/include")
 
-# Default libraries folder
+#	default libraries folder
 set(LIBS_DIR "${DEPENDENCIES_DIR}/libs")
 
-# Python include folder
+#	python include folder
 set(PYTHON_DIR "${INCLUDE_DIR}/python")
 
-# Python lib file
+#	python lib file
 set(PYTHON_LIB "${LIBS_DIR}/python313.lib")
 
 include_directories(${PYTHON_DIR})
 link_directories(${LIBS_DIR})
 
-# Link Python to executable
+#	link Python to executable
 add_executable(taskmanager ${SOURCES} ${HEADERS})
 target_link_libraries(taskmanager ${PYTHON_LIB})

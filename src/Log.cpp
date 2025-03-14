@@ -27,7 +27,7 @@ void CLog::TraceLog(eLogLevel level, const char* format, ...)
 
     std::string logFileName = (level == LOG_LEVEL_ERR) ? FILES[1] : FILES[0];
 
-    std::filesystem::path logFilePath = CFileSystem::Instance().GetBaseOutputDirectory() / logFileName;
+    std::filesystem::path logFilePath = CFileSystem::Instance().GetLogDirectory() / logFileName;
 
     CFileSystem::Instance().CreateFiles(logFileName);
 
