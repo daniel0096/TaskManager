@@ -1,3 +1,7 @@
-import app
+import application
 
-app.f_multiply(10.5, 3.6)
+def main()
+    application.run()
+
+if __name__ == "__main__":
+    main()
