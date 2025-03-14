@@ -137,3 +137,9 @@ bool CFileSystem::FileWrite(const std::string& fileName, const std::string& cont
 	printf_s("Successfully wrote to file: %s\n", filePath.string().c_str());
 	return true;
 }
+
+/* todo */
+void CFileSystem::RegisterPythonFile(const std::string& py_fileName)
+{
+
+}

@@ -1,5 +1,6 @@
 #include "PythonApplicationModule.h"
 #include "Log.h"
+#include "Config.h"
 
 /*test*/
 static PyObject* app_multiplyFloated(PyObject* self, PyObject* args)
@@ -40,11 +41,55 @@ static PyObject* app_sendLog(PyObject* self, PyObject* args)
 	Py_RETURN_NONE;
 }
 
+static PyObject* app_getApplicationStatus(PyObject* self, PyObject* args)
+{
+
+}
+
+static PyObject* app_getApplicationSize(PyObject* self, PyObject* args)
+{
+	/*
+		optimal heap?
+	*/
+	CConfig cfg;
+	std::map<std::string, std::string> applicationSize = cfg.GetConfigSettings();
+
+	PyObject* pyDict = PyDict_New();
+	if (!pyDict)
+		return nullptr;
+
+	for (const auto& pair : applicationSize)
+	{
+		PyObject* key = PyUnicode_FromString(pair.first.c_str());
+		PyObject* value = PyUnicode_FromString(pair.second.c_str());
+
+		if (!key || !value)
+		{
+			Py_XDECREF(key);
+			Py_XDECREF(value);
+			Py_DECREF(pyDict);
+			return nullptr;
+		}
+
+		PyDict_SetItem(pyDict, key, value);
+
+		Py_DECREF(key);
+		Py_DECREF(value);
+	}
+
+	return pyDict;
+}
+
 static PyMethodDef ApplicationMethods[] =
 {
 	/*test*/
 	{ "f_multiply", app_multiplyFloated, METH_VARARGS, "Multiply two floats" },
+	/*test*/
+
 	{ "PY_TRACE", app_sendLog, METH_VARARGS, "Log Python messages to C++ using TRACE_LOG." },
+	{ "get_application_status", app_getApplicationStatus, METH_VARARGS, "Get application sttatus bool--running"},
+	{ "get_width", app_getApplicationSize, METH_VARARGS, "Get application size"},
+
 	{ nullptr, nullptr, 0, nullptr }
 };
 

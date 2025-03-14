@@ -47,6 +47,11 @@ bool CConfig::SetupConfigFile(const std::string& fileName)
 	return true;
 }
 
+//bool CConfig::ConfigFileSet()
+//{
+//
+//}
+
 void CConfig::LoadDefaultConfig()
 {
 	TRACE_LOG(LOG_LEVEL_LOG, "Loading default config...");

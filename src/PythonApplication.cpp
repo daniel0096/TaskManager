@@ -3,7 +3,6 @@
 #include "FileSystem.h"
 #include "Log.h"
 
-#include <Python.h>
 #include <cstdlib>
 
 PythonApplication::PythonApplication()
@@ -79,9 +78,6 @@ PythonApplication::PythonApplication()
 	}
 
 	PyConfig_Clear(&config);
-
-	PyRun_SimpleString("import sys; print('Python loaded correctly')");
-	PyRun_SimpleString("import sys; print('Available modules:', sys.modules.keys())");
 }
 
 PythonApplication::~PythonApplication()
