@@ -21,9 +21,11 @@ static PyObject* app_multiplyFloated(PyObject* self, PyObject* args)
 static PyObject* app_sendLog(PyObject* self, PyObject* args)
 {
 	int logLevel;
-	const char* message;
+	const char* psz_message;
 
-	if (!PyArg_ParseTuple(args, "is", &logLevel, &message))
+	memset(&psz_message, 0x0, sizeof(psz_message));
+
+	if (!PyArg_ParseTuple(args, "is", &logLevel, &psz_message))
 	{
 		PyErr_SetString(PyExc_TypeError, "Expected an integer (log level) and a string (message)");
 		return nullptr;
@@ -37,47 +39,34 @@ static PyObject* app_sendLog(PyObject* self, PyObject* args)
 
 	eLogLevel level = static_cast<eLogLevel>(logLevel);
 
-	TRACE_LOG(level, "[PY_TRACE]: %s", message);
+	std::string logMessage = "[PY_TRACE]: " + std::string(psz_message);
+	TRACE_LOG(level, logMessage.c_str());
+
 	Py_RETURN_NONE;
 }
 
 static PyObject* app_getApplicationStatus(PyObject* self, PyObject* args)
 {
-
+	/*test*/
+	bool running = true; 
+	return PyBool_FromLong(running);
 }
 
 static PyObject* app_getApplicationSize(PyObject* self, PyObject* args)
 {
-	/*
-		optimal heap?
-	*/
-	CConfig cfg;
-	std::map<std::string, std::string> applicationSize = cfg.GetConfigSettings();
+	int width = 1920;
+	int height = 1080;
 
-	PyObject* pyDict = PyDict_New();
-	if (!pyDict)
-		return nullptr;
+	PyObject* pyList = PyList_New(2);
+	PyList_SetItem(pyList, 0, PyLong_FromLong(width));
+	PyList_SetItem(pyList, 1, PyLong_FromLong(height));
 
-	for (const auto& pair : applicationSize)
-	{
-		PyObject* key = PyUnicode_FromString(pair.first.c_str());
-		PyObject* value = PyUnicode_FromString(pair.second.c_str());
+	return pyList;
+}
 
-		if (!key || !value)
-		{
-			Py_XDECREF(key);
-			Py_XDECREF(value);
-			Py_DECREF(pyDict);
-			return nullptr;
-		}
-
-		PyDict_SetItem(pyDict, key, value);
-
-		Py_DECREF(key);
-		Py_DECREF(value);
-	}
-
-	return pyDict;
+static PyObject* app_getApplicationName(PyObject* self, PyObject* args)
+{
+	return PyUnicode_FromString("Task manager");
 }
 
 static PyMethodDef ApplicationMethods[] =
@@ -88,7 +77,8 @@ static PyMethodDef ApplicationMethods[] =
 
 	{ "PY_TRACE", app_sendLog, METH_VARARGS, "Log Python messages to C++ using TRACE_LOG." },
 	{ "get_application_status", app_getApplicationStatus, METH_VARARGS, "Get application sttatus bool--running"},
-	{ "get_width", app_getApplicationSize, METH_VARARGS, "Get application size"},
+	{ "get_application_size", app_getApplicationSize, METH_VARARGS, "Get application size"},
+	{ "get_application_name", app_getApplicationName, METH_VARARGS, "Get application name"},
 
 	{ nullptr, nullptr, 0, nullptr }
 };

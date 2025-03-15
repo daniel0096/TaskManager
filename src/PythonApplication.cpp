@@ -70,6 +70,14 @@ PythonApplication::PythonApplication()
 
 	TRACE_LOG(LOG_LEVEL_LOG, "Initializing Python 3.13...");
 	status = Py_InitializeFromConfig(&config);
+
+	std::string pythonScriptsPath = std::filesystem::current_path().string() + "\\root";
+
+	TRACE_LOG(LOG_LEVEL_LOG, "Appending Python script path: %s", pythonScriptsPath.c_str());
+
+	std::string appendPathCmd = "import sys; sys.path.append(r'" + pythonScriptsPath + "')";
+	PyRun_SimpleString(appendPathCmd.c_str());
+
 	if (PyStatus_Exception(status))
 	{
 		TRACE_LOG(LOG_LEVEL_ERR, "Error initializing Python 3.13: %s", status.err_msg);
