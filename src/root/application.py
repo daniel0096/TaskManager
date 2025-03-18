@@ -9,10 +9,7 @@ class Application:
         self.__is_running = False
 
     def __repr__(self):
-        return "{}"
-
-    def __str__(self):
-        return "{}"
+        return f"Application(self.__app_size={self.__app_size}, self.__is_running={self.__is_running})"
 
     @property
     def appliction_name(self) -> str:
@@ -42,13 +39,13 @@ class Application:
             u.TRACE_LOG(u.LogLevel.LOG_LEVEL_ERR, "Application.py def build_window: window_size is null or does not contain int.")
             return False
 
-        appliction_name = self.appliction_name
+        application_name = self.application_name
 
         app_width = window_size[0]
         app_height = window_size[1]
 
         dpg.create_context()
-        dpg.create_viewport(title=appliction_name, width=app_width, height=app_height)
+        dpg.create_viewport(title=application_name, width=app_width, height=app_height)
 
         with dpg.window(label="Example Window"):
             dpg.add_text("Hello, world")
@@ -60,6 +57,7 @@ class Application:
         dpg.show_viewport()
         dpg.start_dearpygui()
         dpg.destroy_context()
+        return True
 
     def run(self):
         self.BINARY_on_update()
