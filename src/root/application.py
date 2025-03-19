@@ -33,16 +33,14 @@ class Application:
         #   debug
         print(self.__app_size)
 
-    def build_window(self, window_size: list) -> bool:
+    def build_window(self, *window_size: int) -> bool:
 
-        if not window_size or not all(isinstance(x, int) for x in window_size):
-            u.TRACE_LOG(u.LogLevel.LOG_LEVEL_ERR, "Application.py def build_window: window_size is null or does not contain int.")
+        if len(window_size) != 2:
+            u.TRACE_LOG(u.LogLevel.LOG_LEVEL_ERR, "Application.py def build_window: window_size takes exactly two arguments.")
             return False
 
         application_name = self.application_name
-
-        app_width = window_size[0]
-        app_height = window_size[1]
+        app_width, app_height = window_size
 
         dpg.create_context()
         dpg.create_viewport(title=application_name, width=app_width, height=app_height)
@@ -64,7 +62,7 @@ class Application:
 
         application_size = self.application_size
 
-        self.build_window(application_size)
+        self.build_window(*application_size)
 
         while self.__is_running:
             pass
