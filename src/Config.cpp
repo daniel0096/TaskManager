@@ -5,9 +5,18 @@
 #include <fstream>
 #include <sstream>
 
+CConfig::CConfig()
+{
+	/*todo*/
+	/*rewrite -> LoadDefaultConfig only in case the SET config is not available!*/
+	LoadDefaultConfig();
+	/*read set config*/
+	ReadConfig();
+}
+
 bool CConfig::SetupConfigFile(const std::string& fileName)
 {
-	LoadDefaultConfig();
+//	LoadDefaultConfig();
 
 	if (!CFileSystem::Instance().FileExists(fileName))
 	{
@@ -63,12 +72,17 @@ void CConfig::LoadDefaultConfig()
 		TRACE_LOG(LOG_LEVEL_LOG, "Default config: %s = %s", key.c_str(), value.c_str());
 }
 
+bool CConfig::ReadConfig()
+{
+
+}
+
 bool CConfig::WriteConfigToFile(const std::string& fileName)
 {
 	if (m_configContent.empty())
 	{
 		TRACE_LOG(LOG_LEVEL_LOG, "Config map is empty, loading defaults.");
-		LoadDefaultConfig();
+//		LoadDefaultConfig();
 	}
 
 	std::stringstream configStream;

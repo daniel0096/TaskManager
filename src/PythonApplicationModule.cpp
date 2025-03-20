@@ -54,8 +54,29 @@ static PyObject* app_getApplicationStatus(PyObject* self, PyObject* args)
 
 static PyObject* app_getApplicationSize(PyObject* self, PyObject* args)
 {
-	int width = 1920;
-	int height = 1080;
+	CConfig config;
+	const std::map<std::string, std::string>& cfgMap = config.GetConfigSettings();
+
+	std::cout << "Config settings:" << std::endl;
+	for (const auto& [key, value] : cfgMap) {
+		std::cout << key << " = " << value << std::endl;
+	}
+
+	int width = 0, height = 0;
+
+	auto widthIter = cfgMap.find("res_x");
+	auto heightIter = cfgMap.find("res_y");
+
+	if (widthIter != cfgMap.end())
+	{
+		width = std::stoi(widthIter->second);
+	}
+
+	if (heightIter != cfgMap.end()){
+		height = std::stoi(heightIter->second);
+	}
+
+	std::cout << "Width: " << width << ", Height: " << height << std::endl;
 
 	PyObject* pyList = PyList_New(2);
 	PyList_SetItem(pyList, 0, PyLong_FromLong(width));

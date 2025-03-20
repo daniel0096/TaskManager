@@ -14,10 +14,13 @@ typedef struct sConfig
 class CConfig
 {
 public:
+	CConfig();
 	bool SetupConfigFile(const std::string& fileName);
 	void LoadDefaultConfig();
 	bool WriteConfigToFile(const std::string& fileName);
-	inline std::map<std::string, std::string> GetConfigSettings() { return m_configContent; }
+	bool ReadConfig();
+	inline const std::map<std::string, std::string>& GetConfigSettings() const { return m_configContent; }
+	
 private:
 	std::map<std::string, std::string> m_configContent;
 	
