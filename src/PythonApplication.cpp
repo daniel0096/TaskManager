@@ -59,7 +59,6 @@ PythonApplication::PythonApplication()
 	pythonLib = pythonHome + "\\Lib";
 	pythonSitePackages = pythonLib + "\\site-packages";
 #else
-	// Dynamically get pythonHome using sys.prefix from the detected Python executable
 	std::string getHomeCmd = pythonExecutable + " -c \"import sys; print(sys.prefix)\"";
 	FILE* pipeHome = popen(getHomeCmd.c_str(), "r");
 	if (pipeHome)
@@ -73,7 +72,6 @@ PythonApplication::PythonApplication()
 		pclose(pipeHome);
 	}
 
-	// Get stdlib path using sysconfig from the same Python executable
 	std::string getLibCmd = pythonExecutable + " -c \"import sysconfig; print(sysconfig.get_path('stdlib'))\"";
 	FILE* pipeLib = popen(getLibCmd.c_str(), "r");
 	if (pipeLib)
