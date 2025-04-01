@@ -63,13 +63,17 @@ bool CConfig::SetupConfigFile(const std::string& fileName)
 
 void CConfig::LoadDefaultConfig()
 {
+#ifdef _DEBUG
 	TRACE_LOG(LOG_LEVEL_LOG, "Loading default config...");
+#endif
 
 	m_configContent["res_x"] = std::to_string(800);
 	m_configContent["res_y"] = std::to_string(600);
 
+#ifdef _DEBUG
 	for (const auto& [key, value] : m_configContent)
 		TRACE_LOG(LOG_LEVEL_LOG, "Default config: %s = %s", key.c_str(), value.c_str());
+#endif
 }
 
 bool CConfig::ReadConfig()

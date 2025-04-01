@@ -9,8 +9,6 @@
 #	include <cstdlib>
 #endif
 
-//testa
-
 PythonApplication::PythonApplication()
 {
 	std::string pythonHome, pythonExecutable, pythonLib, pythonSitePackages;
@@ -54,11 +52,7 @@ PythonApplication::PythonApplication()
 		exit(1);
 	}
 
-#ifdef _WIN32
-	pythonHome = std::filesystem::path(pythonExecutable).parent_path().string();
-	pythonLib = pythonHome + "\\Lib";
-	pythonSitePackages = pythonLib + "\\site-packages";
-#else
+#ifdef __linux__
 	std::string getHomeCmd = pythonExecutable + " -c \"import sys; print(sys.prefix)\"";
 	FILE* pipeHome = popen(getHomeCmd.c_str(), "r");
 	if (pipeHome)
@@ -84,6 +78,10 @@ PythonApplication::PythonApplication()
 		}
 		pclose(pipeLib);
 	}
+#elif _WIN32
+	pythonHome = std::filesystem::path(pythonExecutable).parent_path().string();
+	pythonLib = pythonHome + "\\Lib";
+	pythonSitePackages = pythonLib + "\\site-packages";
 #endif
 
 	if (pythonHome.empty() || pythonLib.empty())

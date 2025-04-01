@@ -55,10 +55,12 @@ static PyObject* app_getApplicationSize(PyObject* self, PyObject* args)
 	CConfig config;
 	const std::map<std::string, std::string>& cfgMap = config.GetConfigSettings();
 
-	std::cout << "Config settings:" << std::endl;
-	for (const auto& [key, value] : cfgMap) {
+#ifdef _DEBUG
+	TRACE_LOG(LOG_LEVEL_LOG, "Config settings:");
+#endif
+
+	for (const auto& [key, value] : cfgMap)
 		std::cout << key << " = " << value << std::endl;
-	}
 
 	int width = 0, height = 0;
 
@@ -66,15 +68,14 @@ static PyObject* app_getApplicationSize(PyObject* self, PyObject* args)
 	auto heightIter = cfgMap.find("res_y");
 
 	if (widthIter != cfgMap.end())
-	{
 		width = std::stoi(widthIter->second);
-	}
 
-	if (heightIter != cfgMap.end()){
+	if (heightIter != cfgMap.end())
 		height = std::stoi(heightIter->second);
-	}
 
-	std::cout << "Width: " << width << ", Height: " << height << std::endl;
+#ifdef _DEBUG
+	TRACE_LOG(LOG_LEVEL_LOG, "Width %d, Height %d:", width, height);
+#endif
 
 	PyObject* pyList = PyList_New(2);
 	PyList_SetItem(pyList, 0, PyLong_FromLong(width));

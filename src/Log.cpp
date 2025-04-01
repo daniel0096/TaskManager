@@ -15,7 +15,7 @@ void CLog::TraceLog(eLogLevel level, const char* format, ...)
     {
 #ifdef __linux__
         printf("CLog::TraceLog not a value in eLogLevel range 1-2 current value %d", level);
-#elif _WIN_32
+#elif _WIN32
         printf_s("CLog::TraceLog not a value in eLogLevel range 1-2 current value %d", level);
 #endif
         return;
@@ -26,7 +26,7 @@ void CLog::TraceLog(eLogLevel level, const char* format, ...)
     std::tm timeInfo;
 #ifdef __linux__
     localtime_r(&t_now, &timeInfo);
-#elif _WIN_32
+#elif _WIN32
     localtime_s(&timeInfo, &t_now);
 #endif
 
@@ -42,7 +42,7 @@ void CLog::TraceLog(eLogLevel level, const char* format, ...)
     {
 #ifdef __linux__
         printf("Failed to open log file: %s\n", logFilePath.string().c_str());
-#elif _WIN_32
+#elif _WIN32
         printf_s("Failed to open log file: %s\n", logFilePath.string().c_str());
 #endif
         return;
@@ -54,14 +54,14 @@ void CLog::TraceLog(eLogLevel level, const char* format, ...)
 
 #ifdef __linux__
     vsprintf(logMessage, format, args);
-#elif _WIN_32
+#elif _WIN32
     vsprintf_s(logMessage, format, args);
 #endif
     va_end(args);
 
 #ifdef __linux__
     printf("[%04d-%02d-%02d %02d:%02d:%02d] %s %s\n",
-#elif _WIN_32
+#elif _WIN32
     printf_s("[%04d-%02d-%02d %02d:%02d:%02d] %s %s\n",
 #endif
     timeInfo.tm_year + 1900, timeInfo.tm_mon + 1, timeInfo.tm_mday,
