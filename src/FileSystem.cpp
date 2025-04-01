@@ -79,10 +79,12 @@ void CFileSystem::CreateFiles(const std::string& fileName)
 
 	if (std::filesystem::exists(filePath))
 	{
-#ifdef __linux__
+#ifdef _DEBUG
+#	ifdef __linux__
 		printf("Skipping creation: File %s already exists.\n", filePath.string().c_str());
-#elif _WIN32
+#	elif _WIN32
 		printf_s("Skipping creation: File %s already exists.\n", filePath.string().c_str());
+#	endif
 #endif
 		return;
 	}
@@ -140,10 +142,12 @@ bool CFileSystem::FileExists(const std::string& fileName)
 	else if (fileName == "syslog.txt" || fileName == "sysser.txt")
 		filePath = GetLogDirectory() / fileName;
 
-#ifdef __linux__
+#ifdef _DEBUG
+#	ifdef __linux__
 	printf("Checking if file exists: %s\n", filePath.string().c_str());
-#elif _WIN32
+#	elif _WIN32
 	printf_s("Checking if file exists: %s\n", filePath.string().c_str());
+#	endif
 #endif
 
 	bool exists = std::filesystem::exists(filePath);

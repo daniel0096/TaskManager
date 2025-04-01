@@ -17,9 +17,9 @@ void CApplication::Run()
         TRACE_LOG(LOG_LEVEL_ERR, "Initial check failed, please close the application.");
         return;
     }
-
+#ifdef _DEBUG
     TRACE_LOG(LOG_LEVEL_LOG, "Initial check succeeded.");
-
+#endif
     pyApp.RunPythonScript("main.py");
 
     while (m_isRunning)
@@ -49,7 +49,9 @@ bool CApplication::OnInit()
 
 	if (!CFileSystem::Instance().FileExists("sysser.txt"))
 	{
+#ifdef _DEBUG
 		TRACE_LOG(LOG_LEVEL_LOG, "File %s does not exist, creating...", "sysser.txt");
+#endif
 		CFileSystem::Instance().CreateFiles("sysser.txt");
 		TRACE_LOG(LOG_LEVEL_LOG, "File %s created.", "sysser.txt");
 		allFilesWerePresent = false;
@@ -57,7 +59,9 @@ bool CApplication::OnInit()
 
 	if (!CFileSystem::Instance().FileExists("syslog.txt"))
 	{
+#ifdef _DEBUG
 		TRACE_LOG(LOG_LEVEL_LOG, "File %s does not exist, creating...", "syslog.txt");
+#endif
 		CFileSystem::Instance().CreateFiles("syslog.txt");
 		TRACE_LOG(LOG_LEVEL_LOG, "File %s created.", "syslog.txt");
 		allFilesWerePresent = false;
@@ -69,7 +73,9 @@ bool CApplication::OnInit()
 	{
 		if (!CFileSystem::Instance().FileExists(FILES[iter]))
 		{
+#ifdef _DEBUG
 			TRACE_LOG(LOG_LEVEL_LOG, "File %s does not exist, creating...", FILES[iter]);
+#endif
 			CFileSystem::Instance().CreateFiles(FILES[iter]);
 			TRACE_LOG(LOG_LEVEL_LOG, "File %s created.", FILES[iter]);
 			allFilesNowExist = false;

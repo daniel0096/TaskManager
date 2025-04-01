@@ -11,7 +11,7 @@ CConfig::CConfig()
 	/*rewrite -> LoadDefaultConfig only in case the SET config is not available!*/
 	LoadDefaultConfig();
 	/*read set config*/
-	ReadConfig();
+	//ReadConfig();
 }
 
 bool CConfig::SetupConfigFile(const std::string& fileName)
@@ -20,7 +20,9 @@ bool CConfig::SetupConfigFile(const std::string& fileName)
 
 	if (!CFileSystem::Instance().FileExists(fileName))
 	{
+#ifdef _DEBUG
 		TRACE_LOG(LOG_LEVEL_LOG, "Config file does not exist. Creating %s.", fileName.c_str());
+#endif
 		CFileSystem::Instance().CreateFiles(fileName);
 
 		if (!CFileSystem::Instance().FileExists(fileName))
@@ -28,11 +30,14 @@ bool CConfig::SetupConfigFile(const std::string& fileName)
 			TRACE_LOG(LOG_LEVEL_ERR, "Failed to create config file: %s", fileName.c_str());
 			return false;
 		}
-
+#ifdef _DEBUG
 		TRACE_LOG(LOG_LEVEL_LOG, "Config file created, attempting to write...");
 	}
 	else
 		TRACE_LOG(LOG_LEVEL_LOG, "Config file %s already exists, checking writability...", fileName.c_str());
+#else
+	}
+#endif
 
 	std::ofstream testWrite(fileName, std::ios::app);
 	if (!testWrite)
@@ -70,16 +75,14 @@ void CConfig::LoadDefaultConfig()
 	m_configContent["res_x"] = std::to_string(800);
 	m_configContent["res_y"] = std::to_string(600);
 
-#ifdef _DEBUG
 	for (const auto& [key, value] : m_configContent)
 		TRACE_LOG(LOG_LEVEL_LOG, "Default config: %s = %s", key.c_str(), value.c_str());
-#endif
 }
 
-bool CConfig::ReadConfig()
-{
-
-}
+//bool CConfig::ReadConfig()
+//{
+//
+//}
 
 bool CConfig::WriteConfigToFile(const std::string& fileName)
 {

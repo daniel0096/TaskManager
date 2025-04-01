@@ -18,7 +18,7 @@ public:
 	bool SetupConfigFile(const std::string& fileName);
 	void LoadDefaultConfig();
 	bool WriteConfigToFile(const std::string& fileName);
-	bool ReadConfig();
+//	bool ReadConfig();
 	inline const std::map<std::string, std::string>& GetConfigSettings() const { return m_configContent; }
 	
 private:

@@ -18,13 +18,9 @@ PythonApplication::PythonApplication()
 	std::string pythonDetectCmd;
 
 	if (pythonCmd)
-	{
 		pythonDetectCmd = std::string(pythonCmd) + " -c \"import sys; print(sys.executable)\"";
-	}
 	else
-	{
 		pythonDetectCmd = "python3 -c \"import sys; print(sys.executable)\"";
-	}
 
 	FILE* pipe = popen(pythonDetectCmd.c_str(), "r");
 #elif _WIN32
@@ -90,9 +86,11 @@ PythonApplication::PythonApplication()
 		exit(1);
 	}
 
+#ifdef _DEBUG
 	TRACE_LOG(LOG_LEVEL_LOG, "Detected Python executable: %s", pythonExecutable.c_str());
 	TRACE_LOG(LOG_LEVEL_LOG, "Setting PYTHONHOME to: %s", pythonHome.c_str());
 	TRACE_LOG(LOG_LEVEL_LOG, "Setting Python Lib path to: %s", pythonLib.c_str());
+#endif
 
 	PyStatus status;
 	PyConfig config;
@@ -131,8 +129,9 @@ PythonApplication::PythonApplication()
 		PyConfig_Clear(&config);
 		exit(1);
 	}
-
+#ifdef _DEBUG
 	TRACE_LOG(LOG_LEVEL_LOG, "Registering C++ module 'app'");
+#endif
 	PyImport_AppendInittab("app", &PyInit_app);
 
 	TRACE_LOG(LOG_LEVEL_LOG, "Initializing Python...");
@@ -168,8 +167,9 @@ void PythonApplication::RunPythonScript(const std::string& script)
 		TRACE_LOG(LOG_LEVEL_ERR, "Failed to open script: %s", script.c_str());
 		return;
 	}
-
+#ifdef _DEBUG
 	TRACE_LOG(LOG_LEVEL_LOG, "Running Python script: %s", script.c_str());
+#endif
 	PyRun_SimpleFile(fp, runScript.string().c_str());
 
 	if (PyErr_Occurred())
