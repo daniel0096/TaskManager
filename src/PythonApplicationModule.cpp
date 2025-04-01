@@ -21,9 +21,7 @@ static PyObject* app_multiplyFloated(PyObject* self, PyObject* args)
 static PyObject* app_sendLog(PyObject* self, PyObject* args)
 {
 	int logLevel;
-	const char* psz_message;
-
-	memset(&psz_message, 0x0, sizeof(psz_message));
+	const char* psz_message = {};
 
 	if (!PyArg_ParseTuple(args, "is", &logLevel, &psz_message))
 	{
@@ -37,7 +35,7 @@ static PyObject* app_sendLog(PyObject* self, PyObject* args)
 		return nullptr;
 	}
 
-	eLogLevel level = static_cast<eLogLevel>(logLevel);
+	auto level = static_cast<eLogLevel>(logLevel);
 
 	std::string logMessage = "[PY_TRACE]: " + std::string(psz_message);
 	TRACE_LOG(level, logMessage.c_str());

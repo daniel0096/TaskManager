@@ -1,6 +1,10 @@
 ﻿#include "FileSystem.h"
 #include <fstream>
 
+#ifdef __linux__
+#	include <linux/limits.h>
+#endif
+
 void CFileSystem::SetRootDirectory(std::string& rootDir)
 {
 	if (rootDir.empty())
@@ -20,12 +24,18 @@ std::filesystem::path CFileSystem::GetRootDirectory()
 
 std::filesystem::path CFileSystem::GetBaseDirectory()
 {
-	char path[MAX_PATH];
+#ifdef __linux__
+	// On Linux, use /proc/self/exe
+	char result[PATH_MAX];
+	size_t count = readlink("/proc/self/exe", result, PATH_MAX);
+	return std::filesystem::path(std::string(result, (count > 0) ? count : 0)).parent_path();
+#elif _WIN32
 
+	char path[MAX_PATH];
 	if (GetModuleFileNameA(NULL, path, MAX_PATH) == 0)
 		return "";
-
 	return std::filesystem::path(path).parent_path();
+#endif
 }
 
 std::filesystem::path CFileSystem::GetConfigDirectory()
@@ -46,7 +56,11 @@ void CFileSystem::CreateFiles(const std::string& fileName)
 {
 	if (fileName.empty())
 	{
+#ifdef __linux__
+		printf("CreateFiles failed: fileName is empty\n");
+#elif _WIN32
 		printf_s("CreateFiles failed: fileName is empty\n");
+#endif
 		return;
 	}
 
@@ -65,26 +79,44 @@ void CFileSystem::CreateFiles(const std::string& fileName)
 
 	if (std::filesystem::exists(filePath))
 	{
+#ifdef __linux__
+		printf("Skipping creation: File %s already exists.\n", filePath.string().c_str());
+#elif _WIN32
 		printf_s("Skipping creation: File %s already exists.\n", filePath.string().c_str());
+#endif
 		return;
 	}
-
+#ifdef __linux__
+	printf("Attempting to create file: %s\n", filePath.string().c_str());
+#elif _WIN32
 	printf_s("Attempting to create file: %s\n", filePath.string().c_str());
-
+#endif
 	try
 	{
 		std::ofstream outFile(filePath, std::ios::trunc);
 		if (!outFile)
 		{
+#ifdef __linux__
+			printf("Failed to create file: %s\n", filePath.string().c_str());
+#elif _WIN32
 			printf_s("Failed to create file: %s\n", filePath.string().c_str());
+#endif
 			return;
 		}
 		outFile.close();
+#ifdef __linux__
+		printf("File successfully created: %s\n", filePath.string().c_str());
+#elif _WIN32
 		printf_s("File successfully created: %s\n", filePath.string().c_str());
+#endif
 	}
 	catch (const std::exception& e)
 	{
+#ifdef __linux__
+		printf("Failed to create file: %s\nError: %s\n", filePath.string().c_str(), e.what());
+#elif _WIN32
 		printf_s("Failed to create file: %s\nError: %s\n", filePath.string().c_str(), e.what());
+#endif
 	}
 }
 
@@ -92,7 +124,12 @@ bool CFileSystem::FileExists(const std::string& fileName)
 {
 	if (fileName.empty())
 	{
+
+#ifdef __linux__
+		printf("FileExists failed: fileName is empty\n");
+#elif _WIN32
 		printf_s("FileExists failed: fileName is empty\n");
+#endif
 		return false;
 	}
 
@@ -103,12 +140,19 @@ bool CFileSystem::FileExists(const std::string& fileName)
 	else if (fileName == "syslog.txt" || fileName == "sysser.txt")
 		filePath = GetLogDirectory() / fileName;
 
+#ifdef __linux__
+	printf("Checking if file exists: %s\n", filePath.string().c_str());
+#elif _WIN32
 	printf_s("Checking if file exists: %s\n", filePath.string().c_str());
+#endif
 
 	bool exists = std::filesystem::exists(filePath);
 
+#ifdef __linux__
+	printf("File %s exists: %s\n", filePath.string().c_str(), exists ? "YES" : "NO");
+#elif _WIN32
 	printf_s("File %s exists: %s\n", filePath.string().c_str(), exists ? "YES" : "NO");
-
+#endif
 	return exists;
 }
 
@@ -127,14 +171,22 @@ bool CFileSystem::FileWrite(const std::string& fileName, const std::string& cont
 	std::ofstream outFile(filePath, std::ios::out);
 	if (!outFile)
 	{
+#ifdef __linux__
+		printf("Failed to open file: %s\n", filePath.string().c_str());
+#elif _WIN32
 		printf_s("Failed to open file: %s\n", filePath.string().c_str());
+#endif
 		return false;
 	}
 
 	outFile << content;
 	outFile.close();
-
+#ifdef __linux__
+	printf("Successfully wrote to file: %s\n", filePath.string().c_str());
+#elif _WIN32
 	printf_s("Successfully wrote to file: %s\n", filePath.string().c_str());
+#endif
+
 	return true;
 }
 

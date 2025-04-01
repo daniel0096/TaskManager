@@ -2,6 +2,10 @@
 
 #include <iostream>
 #include <unordered_map>
+
+#ifdef __linux__
+#	include "cstdint"
+#endif
 #include <cstdarg>
 
 /* CLog::Instance().SetLogLevel(LOG_LEVEL_LOG); */
@@ -10,7 +14,7 @@
 	CLog::Instance().TraceLog(log_level, format, ##__VA_ARGS__)
 
 /*move to file system*/
-const uint8_t FILE_MAX_LEN = 3;
+constexpr uint8_t FILE_MAX_LEN = 3;
 
 /*
 	enum eFileType
@@ -45,7 +49,7 @@ public:
 	void TraceLog(eLogLevel level, const char* format, ...);
 
 	void SetLogLevel(eLogLevel logLevel);
-	inline eLogLevel GetLogLevel() { return m_logLevel; }
+	inline eLogLevel GetLogLevel() const { return m_logLevel; }
 
 	static CLog& Instance()
 	{

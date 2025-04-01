@@ -1,6 +1,14 @@
 #pragma once
 
-#include "Windows.h"
+#ifdef __linux__
+#	include "unistd.h"
+#	define PLATFORM_NAME "Linux"
+#elif _WIN32
+#	include "Windows.h"
+#	define PLATFORM_NAME "Windows"
+#endif
+
+
 #include <filesystem>
 
 enum eFileDirType
