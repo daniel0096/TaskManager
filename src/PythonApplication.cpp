@@ -9,6 +9,8 @@
 #	include <cstdlib>
 #endif
 
+//test
+
 PythonApplication::PythonApplication()
 {
 	std::string pythonHome, pythonExecutable, pythonLib, pythonSitePackages;
