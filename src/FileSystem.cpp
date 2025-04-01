@@ -88,10 +88,12 @@ void CFileSystem::CreateFiles(const std::string& fileName)
 #endif
 		return;
 	}
-#ifdef __linux__
+#ifdef _DEBUG
+#	ifdef __linux__
 	printf("Attempting to create file: %s\n", filePath.string().c_str());
-#elif _WIN32
+#	elif _WIN32
 	printf_s("Attempting to create file: %s\n", filePath.string().c_str());
+#	endif
 #endif
 	try
 	{
@@ -106,10 +108,12 @@ void CFileSystem::CreateFiles(const std::string& fileName)
 			return;
 		}
 		outFile.close();
-#ifdef __linux__
+#ifdef _DEBUG
+#	ifdef __linux__
 		printf("File successfully created: %s\n", filePath.string().c_str());
-#elif _WIN32
+#	elif _WIN32
 		printf_s("File successfully created: %s\n", filePath.string().c_str());
+#	endif
 #endif
 	}
 	catch (const std::exception& e)
@@ -151,11 +155,12 @@ bool CFileSystem::FileExists(const std::string& fileName)
 #endif
 
 	bool exists = std::filesystem::exists(filePath);
-
-#ifdef __linux__
+#ifdef _DEBUG
+#	ifdef __linux__
 	printf("File %s exists: %s\n", filePath.string().c_str(), exists ? "YES" : "NO");
-#elif _WIN32
+#	elif _WIN32
 	printf_s("File %s exists: %s\n", filePath.string().c_str(), exists ? "YES" : "NO");
+#	endif
 #endif
 	return exists;
 }
@@ -185,12 +190,13 @@ bool CFileSystem::FileWrite(const std::string& fileName, const std::string& cont
 
 	outFile << content;
 	outFile.close();
-#ifdef __linux__
+#ifdef _DEBUG
+#	ifdef __linux__
 	printf("Successfully wrote to file: %s\n", filePath.string().c_str());
-#elif _WIN32
+#	elif _WIN32
 	printf_s("Successfully wrote to file: %s\n", filePath.string().c_str());
+#	endif
 #endif
-
 	return true;
 }
 

@@ -133,9 +133,9 @@ PythonApplication::PythonApplication()
 	TRACE_LOG(LOG_LEVEL_LOG, "Registering C++ module 'app'");
 #endif
 	PyImport_AppendInittab("app", &PyInit_app);
-
+#ifdef _DEBUG
 	TRACE_LOG(LOG_LEVEL_LOG, "Initializing Python...");
-
+#endif
 	status = Py_InitializeFromConfig(&config);
 
 	if (PyStatus_Exception(status))

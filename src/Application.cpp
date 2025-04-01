@@ -8,6 +8,10 @@
 
 void CApplication::Run()
 {
+#if !defined(_DEBUG) && defined(_WIN32)
+	HideDebugBuildConsole();
+#endif
+
     PythonApplication pyApp;
 
     bool initSuccess = OnInit();
@@ -28,6 +32,13 @@ void CApplication::Run()
     }
 }
 
+#if !defined(_DEBUG) && defined(_WIN32)
+void CApplication::HideDebugBuildConsole()
+{
+	HWND hwnd = GetConsoleWindow();
+	ShowWindow(hwnd, SW_HIDE);
+}
+#endif
 
 void CApplication::OnUpdate()
 {

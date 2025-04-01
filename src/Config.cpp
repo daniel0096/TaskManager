@@ -47,7 +47,9 @@ bool CConfig::SetupConfigFile(const std::string& fileName)
 	}
 	else
 	{
+#ifdef _DEBUG
 		TRACE_LOG(LOG_LEVEL_LOG, "Config file %s is writable, writing config...", fileName.c_str());
+#endif
 		testWrite.close();
 	}
 
@@ -56,8 +58,9 @@ bool CConfig::SetupConfigFile(const std::string& fileName)
 		TRACE_LOG(LOG_LEVEL_ERR, "Failed to write to config file: %s", fileName.c_str());
 		return false;
 	}
-
+#ifdef _DEBUG
 	TRACE_LOG(LOG_LEVEL_LOG, "Config file successfully written.");
+#endif
 	return true;
 }
 
@@ -75,8 +78,10 @@ void CConfig::LoadDefaultConfig()
 	m_configContent["res_x"] = std::to_string(800);
 	m_configContent["res_y"] = std::to_string(600);
 
+#ifdef _DEBUG
 	for (const auto& [key, value] : m_configContent)
 		TRACE_LOG(LOG_LEVEL_LOG, "Default config: %s = %s", key.c_str(), value.c_str());
+#endif
 }
 
 //bool CConfig::ReadConfig()
@@ -88,8 +93,10 @@ bool CConfig::WriteConfigToFile(const std::string& fileName)
 {
 	if (m_configContent.empty())
 	{
+#ifdef _DEBUG
 		TRACE_LOG(LOG_LEVEL_LOG, "Config map is empty, loading defaults.");
-//		LoadDefaultConfig();
+#endif
+		//		LoadDefaultConfig();
 	}
 
 	std::stringstream configStream;

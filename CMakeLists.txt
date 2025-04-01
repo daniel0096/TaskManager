@@ -21,6 +21,7 @@ set(HEADERS
 		src/PythonApplication.h
 		src/PythonApplicationModule.h
 		src/Config.h
+		src/BasicDefines.h
 )
 
 set(DEPENDENCIES_DIR "${CMAKE_SOURCE_DIR}/dependencies")
