@@ -24,12 +24,8 @@ void CApplication::Run()
 #ifdef _DEBUG
     TRACE_LOG(LOG_LEVEL_LOG, "Initial check succeeded.");
 #endif
-    pyApp.RunPythonScript("main.py");
-
-    while (m_isRunning)
-    {
-        OnUpdate();
-    }
+	m_isRunning = true;
+	pyApp.RunPythonScript("main.py");
 }
 
 #if !defined(_DEBUG) && defined(_WIN32)
@@ -94,4 +90,9 @@ bool CApplication::OnInit()
 	}
 
 	return allFilesNowExist;
+}
+
+void CApplication::Stop()
+{
+	m_isRunning = false;
 }

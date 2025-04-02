@@ -1,8 +1,12 @@
 #include "PythonApplicationModule.h"
 #include "Log.h"
 #include "Config.h"
+#include "BasicDefines.h"
 
-/*test*/
+#include "Application.h"
+
+extern CApplication* g_appInstance;
+
 static PyObject* app_multiplyFloated(PyObject* self, PyObject* args)
 {
 	float a;
@@ -86,7 +90,23 @@ static PyObject* app_getApplicationSize(PyObject* self, PyObject* args)
 
 static PyObject* app_getApplicationName(PyObject* self, PyObject* args)
 {
-	return PyUnicode_FromString("Task manager");
+	std::string name = APPLICATION_NAME;
+	name.append("	|	Build:").append(APP_BUILD_MODE).append("	|	Platform:").append(PLATFORM_NAME);
+
+	return PyUnicode_FromString(name.c_str());
+}
+
+static PyObject* app_close(PyObject* self, PyObject* args)
+{
+#ifdef _DEBUG
+	TRACE_LOG(LOG_LEVEL_LOG, "Closing from Python.");
+#endif
+	if (g_appInstance)
+		g_appInstance->Stop();
+
+	PyRun_SimpleString("import dearpygui.dearpygui as dpg; dpg.stop_dearpygui()");
+
+	Py_RETURN_NONE;
 }
 
 static PyMethodDef ApplicationMethods[] =
@@ -99,6 +119,8 @@ static PyMethodDef ApplicationMethods[] =
 	{ "get_application_status", app_getApplicationStatus, METH_VARARGS, "Get application sttatus bool--running"},
 	{ "get_application_size", app_getApplicationSize, METH_VARARGS, "Get application size"},
 	{ "get_application_name", app_getApplicationName, METH_VARARGS, "Get application name"},
+
+	{ "close", app_close, METH_VARARGS, "Get application name"},
 
 	{ nullptr, nullptr, 0, nullptr }
 };
