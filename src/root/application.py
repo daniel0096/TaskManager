@@ -12,7 +12,7 @@ class Application:
         return f"Application(self.__app_size={self.__app_size}, self.__is_running={self.__is_running})"
 
     @property
-    def appliction_name(self) -> str:
+    def application_name(self) -> str:
         return app.get_application_name()
 
     @property
@@ -33,6 +33,20 @@ class Application:
         #   debug
         print(self.__app_size)
 
+    def __resize_callback(self, sender, data):
+        width = dpg.get_item_width("MenuWindow")
+        height = dpg.get_item_height("MenuWindow")
+
+#        dpg.set_item_pos("MainTextGroup", (int(width * 0.35), int(height * 0.1)))
+
+        dpg.set_item_width("CalendarButton", int(width * 0.3))
+        dpg.set_item_height("CalendarButton", int(height * 0.1))
+        dpg.set_item_pos("CalendarButton", (int(width * 0.35), int(height * 0.3)))
+
+        dpg.set_item_width("ExitButton", int(width * 0.3))
+        dpg.set_item_height("ExitButton", int(height * 0.1))
+        dpg.set_item_pos("ExitButton", (int(width * 0.35), int(height * 0.5)))
+
     def build_window(self, *window_size: int) -> bool:
 
         if len(window_size) != 2:
@@ -45,28 +59,33 @@ class Application:
         dpg.create_context()
         dpg.create_viewport(title=application_name, width=app_width, height=app_height)
 
-        with dpg.window(label="Example Window"):
-            dpg.add_text("Hello, world")
-            dpg.add_button(label="Save")
-            dpg.add_input_text(label="string", default_value="Quick brown fox")
-            dpg.add_slider_float(label="float", default_value=0.273, max_value=1)
+        with dpg.window(label="Main menu", tag="MenuWindow", width=app_width, height=app_height):
+#            with dpg.group(tag="MainTextGroup"):
+#                dpg.add_text("Main menu", tag="MainText")
+
+            dpg.add_button(label="Calendar", tag="CalendarButton")
+            dpg.add_button(label="Exit", tag="ExitButton", callback=self.on_exit_button)
+
+        dpg.set_viewport_resize_callback(self.__resize_callback)
 
         dpg.setup_dearpygui()
         dpg.show_viewport()
+        dpg.set_primary_window("MenuWindow", True)
+
+        self.__resize_callback(None, None)
+
         dpg.start_dearpygui()
         dpg.destroy_context()
         return True
 
+    def on_exit_button(self):
+        app.close()
+
     def run(self):
         self.BINARY_on_update()
-
         application_size = self.application_size
-
         self.build_window(*application_size)
-
-        while self.__is_running:
-            pass
 
     def on_update(self):
         pass
-            
+
